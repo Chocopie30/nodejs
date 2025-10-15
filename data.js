@@ -10,4 +10,9 @@ function sum(a, b) {
   return a + b;
 }
 const PI = 3.14;
-export { studentAry, sum };
+
+function getStudentInfo() {
+  return ["시작의", "푸름에", "모든", "이름에"];
+}
+
+export { studentAry, sum, getStudentInfo };
