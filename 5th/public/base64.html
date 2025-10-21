@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <form action="upload/excels" method="post" enctype="multipart/form-data">
+      상품번호
+      <input type="text" name="product_id" id="product_id" value="100" /><br />
+      이미지타입
+      <input type="text" name="image_type" id="image_type" value="1" /><br />
+      <input type="file" name="image" accept=".jpg,.jpeg,.png" required />
+      <button type="submit">업로드</button>
+    </form>
+
+    <script>
+      document
+        .querySelector('input[type="file"]')
+        .addEventListener("change", function (even) {
+          // console.log(e.target.files[0]);
+          const file = even.target.files[0];
+          const pid = document.querySelector("#product_id").value;
+          const ptype = document.querySelector("#image_type").value;
+          const reader = new FileReader();
+          reader.onload = function (e) {
+            console.log(e.target.result); //base64 문자열 출력
+            fetch(`upload/${pid}/${ptype}/${file.name}`, {
+              method: "post",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ imageBase64: e.target.result }),
+            })
+              .then((response) => response.text())
+              .then((data) => console.log(data))
+              .catch((err) => console.error("Error:", err));
+          };
+          reader.readAsDataURL(file);
+        });
+    </script>
+  </body>
+</html>
